@@ -45,14 +45,9 @@ const Tracker = () => {
 
   return (
     <section className='w-full h-full flex-col justify-center items-center'>
-        <h3 className='text-3xl font-bold tracking-widest text-center py-8 '>CrypT</h3>
-        <div className='flex justify-center my-4'>
-        <input 
-        type="text"
-        className='w-[60vw] m-auto py-2 px-3 border border-gray-100 rounded-2xl bg-gray-100' 
-        placeholder='Enter Cryptocurrency to search..'/>
-        </div>
-         
+        <h3 className='text-3xl font-bold font-mono text-center py-8 '>CrypTracker</h3>
+        
+        
         <Table />
     </section>
   ); // you can return the table UI or children here later

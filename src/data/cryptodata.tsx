@@ -9,7 +9,7 @@ const cryptoMeta = {
       graph:'/src/assets/g1.png'
     },
     ETHUSDT: {
-      name: 'Ethereum',
+      name: '.Ethereum',
       logo: '/src/assets/ere.jpg',
       Oh:'0.53',
       sevenD:'20.44',
