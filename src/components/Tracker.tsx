@@ -1,0 +1,51 @@
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { updateCrypto } from '../redux/cryptoSlice';
+import { throttle } from 'lodash';
+import Table from './Table';
+
+const Tracker = () => {
+  const dispatch = useDispatch();
+
+  const throttlers : {[key: string]: Function}={};
+  const getThrottler = (symbol:string) => {
+    if (!throttlers[symbol]) {
+      throttlers[symbol] = throttle((payload) => {
+        dispatch(updateCrypto(payload));
+      }, 1000); 
+    }
+    return throttlers[symbol];
+  };
+
+  useEffect(() => {
+    const stream = [
+      'btcusdt@ticker',
+      'ethusdt@ticker',
+      'usdtusdt@ticker',
+      'xrpusdt@ticker',
+      'solusdt@ticker',
+    ].join('/');
+
+    const ws = new WebSocket(`wss://stream.binance.com:9443/stream?streams=${stream}`);
+
+    ws.onmessage = (event) => {
+      const { data } = JSON.parse(event.data);
+      const { s: symbol, c: price, P: change, v: volume } = data;
+
+      getThrottler(symbol)({
+        symbol,
+        price: parseFloat(price),
+        change: parseFloat(change),
+        volume: parseFloat(volume),
+      });
+    };
+
+    return () => ws.close();
+  }, [dispatch]);
+
+  return (
+    <Table />
+  ); // you can return the table UI or children here later
+};
+
+export default Tracker;
