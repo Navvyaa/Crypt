@@ -45,8 +45,10 @@ const Tracker = () => {
 
   return (
     <section className='w-full h-full flex-col justify-center items-center'>
+      <div className='flex items-center justify-center gap-3'>
+      <img src="/assets/logo.png" className="w-9 h-9" alt="" />
         <h3 className='text-3xl font-bold font-mono text-center py-8 '>CrypTracker</h3>
-        
+        </div>
         
         <Table />
     </section>
