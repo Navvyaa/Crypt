@@ -1,6 +1,6 @@
 # CrypTracker
 
-A real-time cryptocurrency tracker built that leverages **Binance's WebSocket API** for lightning-fast updates. View live prices, interactive charts, and track your favorite crypto assets all in one place.
+A real-time cryptocurrency tracker built that leverages **Binance's WebSocket API** for lightning-fast updates. View live prices  and track your favorite crypto assets all in one place.
 
 
 ---
@@ -42,7 +42,7 @@ Your app will start on http://localhost:5173/ (or another available port).
 
 ```bash
 📦 src
-├── assets/              # Static files (images, logos, etc.)
+├── data/                # Stores static data like name, logo ,graph etc
 ├── components/          # Reusable UI components
 │   ├── Table.jsx        # Renders live crypto data in tabular form
 │   ├── Tracker.jsx      # Main tracker UI + WebSocket handler
