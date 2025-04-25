@@ -1,5 +1,4 @@
 # CrypTracker
-### React + TypeScript + Vite
 
 A real-time cryptocurrency tracker built that leverages **Binance's WebSocket API** for lightning-fast updates. View live prices, interactive charts, and track your favorite crypto assets all in one place.
 
