@@ -16,7 +16,7 @@ const Table = () => {
         <thead className='text-sm md:text-lg'>
           <tr className='bg-gray-50'>
             <th className='px-2 md:px-8 py-3'>S.No.</th>
-            <th className='w-[180px] md:w-[220px] text-left'>Name</th>
+            <th className='w-[180px] md:w-[220px] text-left pl-2'>Name</th>
             <th className='px-2 md:px-12'>Price</th>
             <th className='px-2 md:px-3'>24h%</th>
             <th className='lg:hidden w-10'></th>
@@ -45,8 +45,8 @@ const Table = () => {
                     <p className='font-semibold hidden sm:block'>{data.name}</p>
                     <p className='text-gray-400 text-xs lg:text-sm'>{c.symbol.slice(0, -4)}</p>
                   </td>
-                  <td className='px-2 lg:px-3'>${Number(c.price).toLocaleString()}</td>
-                  <td className='px-2 lg:px-3' style={{ color: c.change > 0 ? 'green' : 'red' }}>{c.change}%</td>
+                  <td className='px-2 lg:px-3 text-center'>${Number(c.price).toLocaleString()}</td>
+                  <td className='px-2 lg:px-3 text-center' style={{ color: c.change > 0 ? 'green' : 'red' }}>{c.change}%</td>
                   <td className='lg:hidden'>
                     <button
                       onClick={() => toggleRow(c.symbol)}
@@ -55,12 +55,12 @@ const Table = () => {
                       {isExpanded ? '▼' : '▶'}
                     </button>
                   </td>
-                  <td className='hidden lg:table-cell px-3' style={{ color: parseFloat(data.Oh) > 0 ? 'green' : 'red' }}>{data.Oh}%</td>
-                  <td className='hidden lg:table-cell px-3' style={{ color: parseFloat(data.sevenD) > 0 ? 'green' : 'red' }}>{data.sevenD}%</td>
-                  <td className='hidden lg:table-cell px-3'>{data.marketCap}</td>
-                  <td className='hidden lg:table-cell px-3'>{Number(c.volume).toLocaleString()}</td>
-                  <td className='hidden lg:table-cell px-3'>{data.circulatingSupply}</td>
-                  <td className='hidden lg:table-cell px-3'>
+                  <td className='hidden lg:table-cell px-3 text-center' style={{ color: parseFloat(data.Oh) > 0 ? 'green' : 'red' }}>{data.Oh}%</td>
+                  <td className='hidden lg:table-cell px-3 text-center' style={{ color: parseFloat(data.sevenD) > 0 ? 'green' : 'red' }}>{data.sevenD}%</td>
+                  <td className='hidden lg:table-cell px-3 text-center'>{data.marketCap}</td>
+                  <td className='hidden lg:table-cell px-3 text-center'>{Number(c.volume).toLocaleString()}</td>
+                  <td className='hidden lg:table-cell px-3 text-center'>{data.circulatingSupply}</td>
+                  <td className='hidden lg:table-cell px-3 mx-auto'>
                     <img src={data.graph} alt="" className="w-[200px]" />
                   </td>
                 </tr>

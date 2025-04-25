@@ -50,7 +50,7 @@ const Tracker = () => {
         
         <Table />
     </section>
-  ); // you can return the table UI or children here later
+  ); 
 };
 
 export default Tracker;
