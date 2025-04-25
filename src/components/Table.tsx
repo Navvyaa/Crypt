@@ -1,6 +1,7 @@
 import cryptodata from '../data/cryptodata';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
+import Tooltip from './ToolTip';
 
 const Table = () => {
   const cryptos = useSelector((state: { crypto: any[] }) => state.crypto);
@@ -12,7 +13,7 @@ const Table = () => {
 
   return (
     <div className="overflow-x-auto w-full px-4">
-      <table className='min-w-full'>
+      <table className='min-w-full rounded-lg overflow-hidden shadow-lg'>
         <thead className='text-sm md:text-lg'>
           <tr className='bg-gray-50'>
             <th className='px-2 md:px-8 py-3'>S.No.</th>
@@ -22,9 +23,24 @@ const Table = () => {
             <th className='lg:hidden w-10'></th>
             <th className='hidden lg:table-cell px-3'>1h%</th>
             <th className='hidden lg:table-cell px-3'>7d%</th>
-            <th className='hidden lg:table-cell px-3'>Market Cap</th>
-            <th className='hidden lg:table-cell px-3'>Volume (24h)</th>
-            <th className='hidden lg:table-cell px-3'>Circulating Supply</th>
+            <th className='hidden lg:table-cell px-3'>
+            <Tooltip
+                label="Market Cap" 
+                tooltip="Total market value of a cryptocurrency's circulating supply"
+              />
+            </th>
+            <th className='hidden lg:table-cell px-3'>
+            <Tooltip
+                label="Volume (24h)" 
+                tooltip="Total trading volume across all markets in the last 24 hours"
+              />
+            </th>
+            <th className='hidden lg:table-cell px-3'>
+            <Tooltip
+                label="Circulating Supply" 
+                tooltip="Amount of coins that are circulating in the market"
+              />
+            </th>
             <th className='hidden lg:table-cell px-3'>Last 7 days</th>
           </tr>
         </thead>
@@ -50,7 +66,7 @@ const Table = () => {
                   <td className='lg:hidden'>
                     <button
                       onClick={() => toggleRow(c.symbol)}
-                      className="px-2 py-1 text-gray-600"
+                      className="px-2 py-1 text-gray-600 hover:bg-gray-200 rounded-full transition-colors duration-150"
                     >
                       {isExpanded ? '▼' : '▶'}
                     </button>
