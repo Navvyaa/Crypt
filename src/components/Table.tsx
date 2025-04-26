@@ -141,6 +141,12 @@ useEffect(() => {
     )}
         </div>
       </div>
+      {sortedAndFilteredData.length===0? (
+        <div className='flex items-center flex-col justify-center py-10'>
+          <img src="/assets/empty.png" alt="" className='w-80 h-80' />
+          <p className='text-lg font-semibold text-gray-500'>Try searching a different keyword...</p>
+        </div>
+      ):(
       <table className='min-w-[96vw] mx-auto rounded-lg overflow-hidden shadow-lg'>
         <thead className='text-sm md:text-lg'>
           <tr className='bg-gray-50'>
@@ -246,6 +252,7 @@ useEffect(() => {
           })}
         </tbody>
       </table>
+      )}
     </div>
   );
 };
