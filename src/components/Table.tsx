@@ -1,19 +1,147 @@
 import cryptodata from '../data/cryptodata';
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import Tooltip from './ToolTip';
+// import { set } from 'lodash';
 
 const Table = () => {
   const cryptos = useSelector((state: { crypto: any[] }) => state.crypto);
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [sortConfig,setSortConfig]=useState<{key:string; direction:'asc'| 'desc'}|null>(null);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  // Add this after your state declarations
+useEffect(() => {
+  const handleClickOutside = (event: MouseEvent) => {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.filter-dropdown')) {
+      setIsFilterOpen(false);
+    }
+  };
+
+  document.addEventListener('mousedown', handleClickOutside);
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+  };
+}, []);
+  const filteredCryptos=cryptos.filter((crypto)=>{
+    const symbol=crypto.symbol.toLowerCase();
+    const name=cryptodata[crypto.symbol as keyof typeof cryptodata]?.name?.toLowerCase() || '';
+    const search=searchTerm.toLowerCase();
+    return symbol.includes(search) || name.includes(search);
+  });
+
+
+  const sortData = (key: string) => {
+    let direction: 'asc' | 'desc' = 'asc'; // Default to ascending
+    
+    if (sortConfig && sortConfig.key === key) {
+      // If already sorting by this key, toggle direction
+      direction = sortConfig.direction === 'asc' ? 'desc' : 'asc';
+    }
+    
+    setSortConfig({ key, direction });
+  };
+
+  const getSortedData = () => {
+    if (!sortConfig) return filteredCryptos;
+
+    console.log('Sorting by:', sortConfig.key, 'Direction:', sortConfig.direction);
+
+
+    return [...filteredCryptos].sort((a, b) => {
+      switch (sortConfig.key) {
+        case 'price':
+          return sortConfig.direction === 'asc' 
+            ? Number(a.price) - Number(b.price)
+            : Number(b.price) - Number(a.price);
+        case 'marketCap': {
+          const aMarketCap = parseFloat(cryptodata[a.symbol as keyof typeof cryptodata]?.marketCap?.replace(/[^0-9.]/g, '')) || 0;
+          const bMarketCap = parseFloat(cryptodata[b.symbol as keyof typeof cryptodata]?.marketCap?.replace(/[^0-9.]/g, '')) || 0;
+          return sortConfig.direction === 'asc' ? aMarketCap - bMarketCap : bMarketCap - aMarketCap;
+        }
+        case 'volume':
+          return sortConfig.direction === 'asc'
+            ? Number(a.volume) - Number(b.volume)
+            : Number(b.volume) - Number(a.volume);
+        // case 'change':
+        //   return sortConfig.direction === 'asc'
+        //     ? Number(a.change) - Number(b.change)
+        //     : Number(b.change) - Number(a.change);
+        default:
+          return 0;
+      }
+    });
+  }
+  const sortedAndFilteredData = getSortedData();
+
+
 
   const toggleRow = (symbol: string) => {
     setExpandedRow(expandedRow === symbol ? null : symbol);
   };
 
+
+
   return (
     <div className="overflow-x-auto w-full px-4">
-      <table className='min-w-full rounded-lg overflow-hidden shadow-lg'>
+            <div className=" flex items-center justify-center md:gap-10 gap-2 mb-4">
+        <input
+          type="text"
+          placeholder="Search by symbol or name..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full max-w-md px-4 my-4 py-2 border border-gray-300 rounded-lg focus:outline-none  focus:ring-none  "
+        />
+        <div className='relative ml-4'>
+        <button
+      onClick={() => setIsFilterOpen(!isFilterOpen)}
+      className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 flex items-center gap-2"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clipRule="evenodd" />
+      </svg>
+      Filter
+    </button>
+    
+    {isFilterOpen && (
+      <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-10 border border-gray-200 filter-dropdown">
+        <div className="py-2">
+          <button
+            onClick={() => {
+              sortData('price');
+              setIsFilterOpen(false);
+            }}
+            className="w-full px-4 py-2 text-left hover:bg-gray-100"
+          >
+            Sort by Price {sortConfig?.key === 'price' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+          </button>
+          <button
+            onClick={() => {
+              sortData('marketCap');
+              setIsFilterOpen(false);
+            }}
+            className="w-full px-4 py-2 text-left hover:bg-gray-100"
+          >
+            Sort by Market Cap {sortConfig?.key === 'marketCap' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+          </button>
+          <button
+            onClick={() => {
+              sortData('volume');
+              setIsFilterOpen(false);
+            }}
+            className="w-full px-4 py-2 text-left hover:bg-gray-100"
+          >
+            Sort by Volume {sortConfig?.key === 'volume' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+          </button>
+         
+        </div>
+      </div>
+    )}
+        </div>
+      </div>
+      <table className='min-w-[96vw] mx-auto rounded-lg overflow-hidden shadow-lg'>
         <thead className='text-sm md:text-lg'>
           <tr className='bg-gray-50'>
             <th className='px-2 md:px-8 py-3'>S.No.</th>
@@ -45,7 +173,7 @@ const Table = () => {
           </tr>
         </thead>
         <tbody className='text-sm md:text-lg'>
-          {cryptos.map((c, idx) => {
+          {sortedAndFilteredData.map((c, idx) => {
             const data = cryptodata[c.symbol as keyof typeof cryptodata] || {};
             const isExpanded = expandedRow === c.symbol;
 
